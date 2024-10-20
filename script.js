@@ -84,3 +84,50 @@ const items = [
     img: "./img/12.jpeg",
   },
 ];
+
+const cardTemplate = document.querySelector("#item-template");
+
+function makeCardByTemplate(title, description, tags, price, img) {
+  const myCard = cardTemplate.content.cloneNode(true);
+  myCard.querySelector('h1').textContent = title;
+  myCard.querySelector('p').textContent = description;
+  myCard.querySelector('.price').textContent = price;
+  myCard.querySelector('img').src = img;
+
+  for (let i = 0; i < tags.length; i++) {
+    const elem = document.createElement('div');
+    elem.classList.add('tag');
+    elem.textContent = tags[i];
+    myCard.querySelector('.tags').append(elem);
+  }
+
+  return myCard;
+}
+
+const shopItems = document.querySelector("#shop-items");
+
+for (let i = 0; i < items.length; i++) {
+  shopItems.append(makeCardByTemplate(items[i].title, items[i].description, items[i].tags, items[i].price, items[i].img));
+}
+
+//Продвинутый уровень
+
+const searchBtn = document.querySelector("#search-btn");
+const searchInput = document.querySelector("#search-input");
+const nothingFound = document.querySelector("#nothing-found");
+
+searchBtn.addEventListener('click', function () {
+  nothingFound.textContent = "";
+
+  for (let j = 0; j < items.length; j++) {
+    if (searchInput.value.trim().toLowerCase() === items[j].title.trim().toLowerCase()) {
+      shopItems.innerHTML = '';
+      shopItems.append(makeCardByTemplate(items[j].title, items[j].description, items[j].tags, items[j].price, items[j].img));
+      break;
+    } else {
+      shopItems.innerHTML = '';
+      nothingFound.textContent = "Ничего не найдено";
+      shopItems.append(nothingFound);
+    };
+  }
+});
